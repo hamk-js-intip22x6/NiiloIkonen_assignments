@@ -1,0 +1,19 @@
+{
+    "ensimmäinen": {
+        "kysymys": "Mitkä näistä eläimistä tuotta myrkkyä?",
+        "vastaukset": ["Aasi", "Nokkaeläin", "Mehiläinen", "Lukki"],
+        "oikea": 1
+    },
+    "toinen": 
+    {
+        "kysymys": "Mikä on taivaanvuohi",
+        "vastaukset": ["Kaupunki", "Vuohi", "Lintu", "Suomen vanhin panimo"],
+        "oikea": 2
+    },
+    "kolmas": 
+    {
+        "kysymys": "Mikä on Suomen yleisin järvityyppi",
+        "vastaukset": ["Termokarsti", "Fluviaali", "Kluuvi", "Glasiaali"],
+        "oikea": 3
+    }
+}

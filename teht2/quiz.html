@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Quiz!</title>
+</head>
+<body>
+    <h1>Luontokysely</h1>
+    <div id="questions"></div>
+
+    <hr>
+    <button id="id_button" onclick="checkAnswers()">Tarkista</button>
+    <p id="result"></p>
+
+    <script>
+        // Ohjelman pitäisi olla helposti skaalattavissa. JS koodille ei tarvitse tehdä mitään ylimääräistä.
+        
+        const questionsArea = document.getElementById("questions")
+        const result = document.getElementById("result")
+        let rightAnswers = []
+
+        // Haetaan kysymykset questions.json tiedostosta
+        async function fetchQuestions() {
+            const questions = await fetch("./questions.json")
+            const data = await questions.json()
+            await createElements(data)
+        }
+
+        // luodaan elementit datan perusteella
+        function createElements(data) {
+            let j = 0
+            let element = ""
+
+            //  Luodaan elementit HTML dokumenttiin
+            for (let items in data) {
+                // oikeat vastaukset pusketaan vähän hölmösti omaan listaan
+                rightAnswers.push(data[items].oikea) 
+                element += `<h2> ${data[items].kysymys} </h2>`
+                
+                for (let i = 0; i < data[items].vastaukset.length; i++) {
+                    let item = data[items].vastaukset[i]
+                    element += `<input type="radio" name="kysymys${j}" id=${i}><label for="${i}"> ${item} </label> <br>`
+                }
+                j++
+            }
+            questionsArea.innerHTML = element
+        }
+
+        // tarkastetaan vastaukset
+        function checkAnswers() {
+            let points = 0;
+            
+            for (let i = 0; i < rightAnswers.length; i++) {
+                // Haetaan dokumentista käyttäjän laittamat vastaukset ja tarkastetaan että ne eivät ole tyhjiä
+                const userInput = document.querySelector(`input[name=kysymys${i}]:checked`)
+
+                if (userInput === null) {
+                    result.innerHTML = "Vastaa kaikkiin kysymyksiin"
+                    break;
+                } else if (rightAnswers[i] === Number(userInput.id)) {
+                    points++
+                }
+                result.innerHTML = "Oikeita vastauksia: " + points
+            }
+        }
+
+        fetchQuestions()
+    </script>
+</body>
+</html>
