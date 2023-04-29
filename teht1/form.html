@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form site</title>
+    <style>
+        body {
+            padding: 5px;
+        }
+        .box {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <form onsubmit="handleSubmit(event);output()">
+        <label for="id_fullname">Full name:</label>
+        <input type="text" id="id_fullname" max="80" size="40" placeholder="Firstname Lastname" required>
+        <br>
+
+        <label for="id_password">Password:</label>
+        <input list="password" pattern="^[\w,.\-:;?!]{8,20}$" type="password" id="id_password" size="40" required>
+        <br>
+        
+        <label for="id_password2">Password again:</label>
+        <input list="password2" type="password" id="id_password2" min="8" max="20" size="40" required>
+
+        <fieldset>
+            <legend>Gender</legend>
+            <input type="radio" name="gender" value="m" id="male" required><label for="male">Male</label>
+            <input type="radio" name="gender" value="f" id="female"><label for="female"> Female</label>
+            <input type="radio" name="gender" value="o" id="other"><label for="other"></label>Other</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Hobbies</legend>
+            <input type="checkbox" id="id_checkbox1" name="hobbies" value="Games">
+            <label for="id_checkbox1">Games</label><br>
+
+            <input type="checkbox" id="id_checkbox2" name="hobbies" value="Music">
+            <label for="id_checkbox2">Music</label><br>
+
+            <input type="checkbox" id="id_checkbox3" name="hobbies" value="Sports">
+            <label for="id_checkbox3">Sports</label><br>
+
+            <input type="checkbox" id="id_checkbox4" name="hobbies" value="TV">
+            <label for="id_checkbox4">TV</label><br>
+        </fieldset>
+
+        <label for="id_birthdate">Birthdate:</label>
+        <input list="birthdate" type="date" id="id_birthdate">
+        <br>
+
+        <label for="id_number_input">Height (cm):</label>
+        <input type="range" id="id_number_input" min="40" max="300" value="170"
+            oninput="id_number_output.value = this.value">
+        <input type="number" id="id_number_output" value="170" min="40" max="300"
+            oninput="id_number_input.value = this.value">
+        <br>
+
+        <label for="id_color">Favourite color:</label>
+        <input type="color" id="id_color">
+        <br>
+
+        <label for="id_country">Country:</label>
+        <select name="country" id="id_country">
+            <optgroup label="Scandinavia">
+                <option value="fi">Finland</option>
+                <option value="de">Denmark</option>
+                <option value="no">Norway</option>
+                <option value="sv">Sweden</option>
+            </optgroup>
+            <optgroup label="Baltic">
+                <option value="es" selected>Estonia</option>
+                <option value="lv">Latvia</option>
+                <option value="lt">Lithuania</option>
+            </optgroup>
+        </select>
+        <br>
+
+        <label for="id_profession">Profession:</label>
+        <input list="professions" id="id_profession" placeholder="President" size="40">
+        <datalist id="professions">
+            <option value="Teacher">
+            <option value="Nurse">
+            <option value="Plumber">
+            <option value="Bureaucrat">
+        </datalist>
+
+        <br>
+        <label for="id_message">Messagebox</label>
+        <textarea type="text" id="id_message" required maxlength="1000" placeholder="leave a comment (max. 1000 characters)." rows="8" cols="60"></textarea>
+        <br>
+
+
+        <input type="submit" id="id_button" value="Submit" />
+    
+    </form>
+    <br />
+    
+    <output id="id_result"></output>
+
+
+    <script>
+        let result = "";
+
+        let name = document.getElementById("id_fullname");
+        let password = document.getElementById("id_password");
+        let password2 = document.getElementById("id_password2");
+        let birthdate = document.getElementById("id_birthdate");
+        let height = document.getElementById("id_number_input");
+        let color = document.getElementById("id_color");
+        const countrySelect = document.getElementById("id_country");
+        const country = countrySelect.options[countrySelect.selectedIndex].text;
+        let profession = document.getElementById("id_profession");
+        let message = document.getElementById("id_message");
+        password.oninvalid = function(event) {
+            event.target.setCustomValidity('Password should only contain minimum 8 and max 20 characters: a-z, A-Z and _');
+        }
+
+        function output() {
+            result = ""
+            result += `Name: ${name.value} <br>`;
+            
+            // salasanan tarkistus
+            if (password.value === password2.value) {
+                result += `Password: ${password.value} <br>`;
+            }
+            //Harrastukset
+            let hobbies = document.querySelectorAll("input[name=hobbies]:checked");
+            if (hobbies.length > 0) {
+                result += "Hobby: "
+                for (let i = 0; i < hobbies.length; i++) {
+                    result += `${hobbies[i].value}`;
+                    if(i < hobbies.length - 1) {
+                        result += ","
+                    }
+                    result += " "
+                }
+                result += "<br>"
+            }
+            // sukupuoli
+            let gender = document.querySelector("input[name=gender]:checked").value;
+            let genderText = ""
+            switch (gender) {
+                case "m": 
+                    genderText = "Male";
+                    break;
+                case "f":
+                    genderText = "Female";
+                    break;
+                case "o": 
+                    genderText = "Other";
+                    break;
+                default:
+                    break;
+            }
+            result += `Gender: ${genderText}<br>`;
+            result += `Birth date: ${birthdate.value}<br>`;
+            result += `Height: ${height.value}cm <br>`; 
+            result += `Favorite color: ${color.value} <br>`;
+            result += `Country: ${country}<br>`;
+            result += `Profession: ${profession.value} <br>`;
+            result += `Message: ${message.value}`;
+
+            document.getElementById("id_result").innerHTML = result;
+            
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+        }
+    </script>
+</body>
+
+</html>
