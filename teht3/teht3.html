@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        label {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h1>Funktiolaskin</h1>
+
+    <label for="functionInput">function f(x) return value: </label>
+    <input id="functionInput" type="text" value="Math.sin(x)*5+10">
+
+    <br>
+    <label for="xStartInput">Start of X range: </label>
+    <input id="xStartInput" type="number" value="-20">
+
+    <br>
+    <label for="xEndInput">End of X range: </label>
+    <input id="xEndInput" type="number" value="20">
+
+    <br>
+    <label for="xStepInput">X step: </label>
+    <input id="xStepInput" type="number" value="0.25">
+
+    <br>
+    <label for="yFactorInput">Y Scale factor: </label>
+    <input id="yFactorInput" type="number" value="20">
+
+    <br>
+    <button onclick="update()">
+        <p>calculate</p>
+    </button>
+
+    <hr>
+
+    <canvas id="myChart"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+    <script>
+        let functionText = document.getElementById("functionInput").value;
+        let xStart = Number(document.getElementById("xStartInput").value);
+        let xEnd = Number(document.getElementById("xEndInput").value);
+        let xStep = Number(document.getElementById("xStepInput").value);
+        let yFactor = Number(document.getElementById("yFactorInput").value);
+
+        let dataSet = []
+        let dataLabels = []
+
+
+
+        function calculate(xStart, xEnd) {
+            let x = xStart
+            if (xStep > 0 && yFactor > 0 && xStart < xEnd) {
+                for (let i = xStart; i <= xEnd; i += xStep) {
+                    dataLabels.push(i);
+                    x = x + xStep
+
+                    dataSet.push(eval(functionText))
+                }
+            } else { console.log("vittu") }
+        }
+        calculate(xStart, xEnd)
+
+        const myCanvas = document.getElementById('myChart');
+
+        const myChart = new Chart(myCanvas, {
+            type: 'line',
+            data: {
+                labels: dataLabels,
+                datasets: [{
+                    data: dataSet,
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        min: -20,
+                        max: 20,
+                        stepSize: 1
+                    },
+                    y: {
+                        type: 'linear',
+                        ticks: {
+                            min: -100,
+                            max: 100,
+                            stepSize: 100
+                        }
+                    }
+                }
+            }
+        });
+
+        function update() {
+            functionText = document.getElementById("functionInput").value;
+            xStart = Number(document.getElementById("xStartInput").value);
+            xEnd = Number(document.getElementById("xEndInput").value);
+            xStep = Number(document.getElementById("xStepInput").value);
+            yFactor = Number(document.getElementById("yFactorInput").value);
+            
+            dataSet = []
+            dataLabels = []
+
+            calculate(xStart, xEnd)
+
+            myChart.data.datasets[0].data = dataSet
+            myChart.data.labels = dataLabels
+            myChart.options.scales.x.min = xStart
+            myChart.options.scales.x.max = xEnd
+            myChart.update()
+        }
+
+    </script>
+</body>
+
+</html>
