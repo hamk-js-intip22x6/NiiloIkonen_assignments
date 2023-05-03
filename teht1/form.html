@@ -13,6 +13,9 @@
         .box {
             margin: 5px;
         }
+        #invalidPassword {
+            color: red;
+        }
     </style>
 </head>
 
@@ -28,6 +31,7 @@
         
         <label for="id_password2">Password again:</label>
         <input list="password2" type="password" id="id_password2" min="8" max="20" size="40" required>
+        <p id="invalidPassword"></p>
 
         <fieldset>
             <legend>Gender</legend>
@@ -122,13 +126,19 @@
             event.target.setCustomValidity('Password should only contain minimum 8 and max 20 characters: a-z, A-Z and _');
         }
 
+        
+        let invalidPassword = document.getElementById("invalidPassword")
+
         function output() {
             result = ""
             result += `Name: ${name.value} <br>`;
+            invalidPassword.innerHTML = ""
             
             // salasanan tarkistus
             if (password.value === password2.value) {
                 result += `Password: ${password.value} <br>`;
+            } else {
+                invalidPassword.innerHTML = "Salasanat eivät täsmää."
             }
             //Harrastukset
             let hobbies = document.querySelectorAll("input[name=hobbies]:checked");
@@ -168,7 +178,6 @@
             result += `Message: ${message.value}`;
 
             document.getElementById("id_result").innerHTML = result;
-            
         }
 
         function handleSubmit(event) {

@@ -68,10 +68,15 @@
                 for (let i = xStart; i <= xEnd; i += xStep) {
                     dataLabels.push(i);
                     x = x + xStep
-
-                    dataSet.push(eval(functionText))
+                    try {
+                        dataSet.push(eval(functionText))
+                    } catch {
+                        alert("Kirjoita funktio oikeassa muodossa")
+                        break;
+                    }
                 }
-            } else { console.log("vittu") }
+                
+            } else { console.log("Ongelmia") }
         }
         calculate(xStart, xEnd)
 
